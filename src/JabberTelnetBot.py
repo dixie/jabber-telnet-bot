@@ -7,6 +7,7 @@ import sys
 import os
 import xmpp.simplexml
 import getopt
+import logging
 
 # This is necessary for loading some pretty modules in lib/dir 
 sys.path.append(os.path.join(os.path.dirname(sys.argv[0]),"lib"))
@@ -54,12 +55,12 @@ class UserMap:
         return self.user_map_by_jabber.get(user.getID())
         
     def addUserPair(self, userJabber, userTelnet):
-        print("Added new user pair Jabber=%s and Telnet=%s" % (userJabber.getID(), userTelnet.getID()))
+        logging.info("Added new user pair Jabber=%s and Telnet=%s" % (userJabber.getID(), userTelnet.getID()))
         self.user_map_by_jabber[userJabber.getID()] = userTelnet
         self.user_map_by_telnet[userTelnet.getID()] = userJabber
         
     def removeUserPair(self, userJabber, userTelnet):
-        print("Remove user pair Jabber=%s and Telnet=%s" % (userJabber.getID(), userTelnet.getID()))
+        logging.info("Remove user pair Jabber=%s and Telnet=%s" % (userJabber.getID(), userTelnet.getID()))
         del self.user_map_by_jabber[userJabber.getID()]
         del self.user_map_by_telnet[userTelnet.getID()]
 
@@ -73,23 +74,23 @@ class Bot:
         self.users = UserMap()
     
     def handleTelnetMessage(self, user, msg):
-        print "handle Telnet message"
+        logging.debug("handle Telnet message")
         userJb = self.users.getJabberUser(user)
         if userJb == None:
-            print("No Jabber user for Telnet user found: %s" % user.getID())
+            logging.error("No Jabber user for Telnet user found: %s" % user.getID())
         else:
-	    ansiText = Ansi.AnsiText(msg.getText())
-	    htmlText = ansiText.render()
+            ansiText = Ansi.AnsiText(msg.getText())
+            htmlText = ansiText.render()
             msgHTML = "<p style=\"font-family: courier\"><br/>%s</p> " % htmlText
-	    print("\n\n"+msgHTML+"\n\n")
+            print("\n\n"+msgHTML+"\n\n")
             msgJb = Jabber.Message("Your IM don't support rich text messages",msgHTML)
-            self.jb.send(userJb.getJabberUser(),msgJb)
+            self.jb.send(userJb.getJabberUser(),msgJb,userJb.getThread(),userJb.getType())
             
     def handleTelnetDisconnect(self, user):
-        print "Handle Telnet disconnect"
+        logging.debug("Handle Telnet disconnect")
         userJb = self.users.getJabberUser(user)
         if userJb == None:
-            print("No Jabber user for Telnet user found: %s" % user.getID())
+            logging.error("No Jabber user for Telnet user found: %s" % user.getID())
         else:
             txt = "Telnet Connection Lost"
             msgJb = Jabber.Message(txt,"<p style=\"font-weight: bold\">%s</p>" % txt)
@@ -97,7 +98,7 @@ class Bot:
             self.users.removeUserPair(userJb, user) 
         
     def handleJabberMessage(self, user, msg):
-        print "Observing Jabber"
+        logging.debug("Observing Jabber")
         userAt = self.users.getTelnetUser(user)
         if userAt == None:
             userAt = self.at.createUser()
@@ -106,10 +107,10 @@ class Bot:
         self.at.send(userAt, msgAt)
         
     def serve(self):
-	try:
-	    self.jb.serve_forever()
-	finally:
-	    self.at.shutdown()
+        try:
+            self.jb.serve_forever()
+        finally:
+            self.at.shutdown()
 
 def showUsage():
     print("Usage: %s -c <config> [-v]" % sys.argv[0])
@@ -144,6 +145,11 @@ for o, a in opts:
 #
 print("Loading configuration from %s" % CONFIG_FILENAME)
 execfile(CONFIG_FILENAME)
+
+
+
+for pairs in [("HOST", ATL_HOST),("PORT", ATL_PORT), ("JABBERID",JABBER_JID)]:
+    print("%s=%s" % pairs)
 
 #
 # Start the game
