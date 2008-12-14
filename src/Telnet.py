@@ -3,6 +3,7 @@ import os
 import time
 import select
 import socket
+import string
 import sys
 
 #
@@ -22,7 +23,7 @@ import sys
 
 # These values are defined in seconds 
 FORCE_FLUSH_TIME = 6
-FORCE_FLUSH_SIZE = 80*30
+FORCE_FLUSH_LINES = 3
 SILENT_FLUSH_TIME = 2
 
 #
@@ -74,9 +75,9 @@ class User:
         # after FORCE_FLUSH_TIME window
         if(timeNow - self.timestamp_flush > FORCE_FLUSH_TIME):
             return True
-	# In the case of the big buffer, flush immediatly
-	if len(self.buffer) > FORCE_FLUSH_SIZE:
-	    return True
+        # In the case of the big buffer, flush immediatly
+        if len(string.split(self.buffer, '\n')) > FORCE_FLUSH_LINES:
+            return True
         return False
        
 #
