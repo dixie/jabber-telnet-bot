@@ -22,14 +22,22 @@ class HTMLMessage(xmpp.Message):
         print(str(self))
 
 class User:
-    def __init__(self,user):
+    def __init__(self,user,thread,atype):
         self.user = user
+        self.thread = thread
+        self.atype = atype
         
     def getID(self):
         return self.user.getStripped()  
     
     def getJabberUser(self):
         return self.user
+    
+    def getType(self):
+        return self.atype
+    
+    def getThread(self):
+        return self.thread
 
 class Message:
     def __init__(self,body=None,richBody=None):
@@ -85,19 +93,19 @@ class Gateway:
     def quit(self):
         self.__finished = True
 
-    def send(self, user, msg, in_reply_to = None):
+    def send(self, user, msg, thread=None, atype=None):
         """Sends a simple message to the specified user."""
         mess = HTMLMessage( user, msg.getText(), richBody=msg.getRichText())
-        if in_reply_to:
-            mess.setThread( in_reply_to.getThread())
-            mess.setType( in_reply_to.getType())
+        if thread and atype:
+            mess.setThread(thread)
+            mess.setType(atype)
         self.connect().send( mess)
 
     def callback_message( self, conn, mess):
         """Messages sent to the bot will arrive here. Command handling + routing is done in this function."""
         print("callback_message method")
         msg = Message(mess.getBody())
-        usr = User(mess.getFrom())
+        usr = User(mess.getFrom(),mess.getThread(), mess.getType())
         for observer in self.observers:
             observer.handleJabberMessage(usr,msg)
             
