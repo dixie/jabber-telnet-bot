@@ -3,6 +3,7 @@
 import sys
 import re
 import xmpp.simplexml
+import logging
 
 ESC_TO_HTML = {
     '30m' : 'black',
@@ -41,7 +42,7 @@ class AnsiText:
             #print "\nParsed: %s" % content
             return (DataType.COLOR, content)
         else:
-            print("Invalid ESC Sequence - at least for me")
+            logging.warn("Invalid ESC Sequence - at least for me")
             return (DataType.TEXT, '')
 
     def parseString(self,txt):
@@ -91,7 +92,8 @@ class AnsiText:
                 if value == '\n':
                     txt += '<br/>'
                 else:
-                    txt += "<!-- Terminal CONTROL Data -->" 
+                    #txt += "<!-- Terminal CONTROL Data -->" 
+                    logging.info("Terminal Control data")
             elif type == DataType.COLOR:
                 if ESC_TO_HTML.has_key(value):
                     txt += "<span style=\"color:%s\">" % str(ESC_TO_HTML[value])
@@ -105,7 +107,8 @@ class AnsiText:
                     txt += ''.join(tagStack)
                     tagStack = []
                 else:
-                    txt += "\n<!-- ESC COLOR (%s) not known -->\n" % str(value)
+                    logging.warn("Unknown ESC Color Sequence (%s)" % str(value))
+                    #txt += "\n<!-- ESC COLOR (%s) not known -->\n" % str(value)
             elif type == DataType.TEXT:
                     txt += xmpp.simplexml.XMLescape(value)
         tagStack.reverse()
