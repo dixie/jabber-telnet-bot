@@ -56,8 +56,12 @@ class User:
     # and empty buffer at same time
     #
     def flushBuffer(self):
-        buff = self.buffer
-        self.buffer = ""
+        lines = string.split(self.buffer, '\n')
+        if(len(lines) == FORCE_FLUSH_LINES):
+            self.buffer = lines.pop()
+        else:
+            self.buffer = ""
+        buff = '\n'.join(lines)
         self.timestamp_flush = time.time()
         self.timestamp_mod = time.time()
         return buff
