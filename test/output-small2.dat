@@ -1,0 +1,19 @@
+Po druhe: vsetky prikazy mozu byt [1mskratene[0m! Napr.: .pom = .pomoc[0m
+[0m
+Zoznam dostupnych prikazov pre Tvoj level ziskas napisanim [1m.commands[0m[0m
+Viac o leveloch ktore mozes dosiahnut sa dozvies prikazom [1m.ranks[0m[0m
+Ak mas nejake otazky a chces sa na nieco spytat, pozri sa najprv do zoznamu [0m
+casto kladenych otazok (prikaz [1m.faq[0m) a mozno tam najdes odpoved.[0m
+[0m
+Hned po prihlaseni mas nastavene zapnute farby. Ak boli s nimi problemy, mozes[0m
+si ich vypnut prikazom [1m.colour off[0m[0m
+[0m
+Ak sa k nam hlasis cez telnet, vyskusaj si prikaz [1m.client[0m ktory zapne[0m
+specialny editacny riadok do ktoreho budes pisat. Tvoj text teda nebude[0m
+prepisovany vypismi z talkera.[0m
+[0m
+Viac informacii o konkretnom prikaze sa dozvies cez [1m.pomoc konkretny prikaz[0m[0m
+Cim mas vyssi level, tym je Ti k dispozicii viac moznosti, vyhod a prikazov.[0m
+Ako OTROK nemozes robit skoro nic, preto sa co najskor zaregistruj ako riadny[0m
+OBCAN pomocou prikazu [1m.request[0m[0m
+[44m[1m[36m[57%] [37mstr:[36m 1, [33mENTER[37m-dalej, [33mB[37m-spat, [33mR[37m-znovu, [33mn[37m/[33m-n[37m stran, [33m/[37mhladat, [33mE[37m-koniec[0m[40m [0m[0mPouzi: .suicide <tvoje heslo>[0m

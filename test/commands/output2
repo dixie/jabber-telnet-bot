@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "<p>"
+./Anal.py output-small2.dat
+echo "</p>"

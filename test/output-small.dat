@@ -1,0 +1,57 @@
+vidla su zavazne pre kazdeho uzivatela talkera.  Kazdy uzivatel je oboznameny[0m
+s tymito pravidlami  a prihlasenim  na talker  a pouzivanim talkera vyjadruje[0m
+s nimi svoj suhlas a svoju volu ich dodrziavat.  Ak uzivatel s tymito pravid-[0m
+lami  nesuhlasi,  a/alebo  ich nechce dodrziavat,  je povinny  pouzit  prikaz[0m
+[1m.suicide[0m a odstranit svoju existenciu zo sveta Atlantisu.[0m
+[0m
+Podrobny prehlad obsahu [1m.rules[0m ziskate prostredictvom [1m.help rules[0m.[0m
+[0m
+[0m
+[1m[33m2. Codex Atlanticus[0m[0m
+[0m
+[44m[1m[36m[8%] [37mstr:[36m 1, [33mENTER[37m-dalej, [33mB[37m-spat, [33mR[37m-znovu, [33mn[37m/[33m-n[37m stran, [33m/[37mhladat, [33mE[37m-koniec[0m[40m [0m[0m
+Ak suhlasis s predchadzajucim prehlasenim, napis "ano":[0m
+[0mZvolil si moznost "ANO". Prajeme pekny den na Atlantise.[0m
+[0m[0m[1mAko novemu uzivatelovi ti odporucame:[0m[0m
+[0m   -> Zaregistrovat sa ako obcan (CITIZEN) prikazom [1m.request[0m[0m
+[0m   -> Nastavit si nejaku popisku - [1m.desc[0m (zobrazuje sa pri .who, apod)[0m
+[0m[0m
+[36m+--- [32mLokacia: [1m[37mnamestie[0m[36m --------------------------------------------------------+[0m
+[0mNachadzas sa na hlavnom namesti hlavneho mesta Atlantidy,   [36m ==   == [0m[37m[0m
+krajiny  zasvatenej  bohovi  Poseidonovi...  Prave  tu sa  [36m =   =   = [0m[37m[0m
+stretavaju vsetci putnici  z  dalekych krajin, ako  aj  z      [36m = [0m[37m[0m
+inych miest Atlantidy. Stojac pri velkej fontane, vybudo-  [1m\[34mUUUUUUUUU[37m/ [0m[37m[0m
+vanej na  pocest  boha  Poseidona, si  tu vymienaju svoje  [1m  (=====) [0m[0m
+skusenosti...                                              [1m ^^^^^^^^^ [0m[0m
+[0m[0m
+[36mNikto okrem Teba tu nie je.[0m
+[0m[0m
+[0m[36mMozes ist: [32mtrhovisko  [32mposeidonov_chram  [32mpristav  [32mkrcma  [32marena [0m
+[0m[36mNachadza sa tu:[37m [37mdudlik.[0m
+[0m[36mPristup je [1m[32mVEREJNY [0m[32m(fixne)[36m a na nastenke nie je ziadna sprava.[0m
+[0m[0m[36mPovedal si:[0m[37m skuska[0m
+[0m[0mTento prikaz je dostupny az od levelu OBCAN.[0m
+[0m[0m[32m[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=]=[=][0m[37m[0m
+[0m
+      [1m[33m[44m   Prva pomoc v Atlantide (alebo: som tu prvy krat, pomozte mi!)   [0m[40m[0m
+[0m
+Po prve: zapamataj si, ze vsetky prikazy sa [1mmusia[0m zacinat s bodkou (.) ![0m
+Po druhe: vsetky prikazy mozu byt [1mskratene[0m! Napr.: .pom = .pomoc[0m
+[0m
+Zoznam dostupnych prikazov pre Tvoj level ziskas napisanim [1m.commands[0m[0m
+Viac o leveloch ktore mozes dosiahnut sa dozvies prikazom [1m.ranks[0m[0m
+Ak mas nejake otazky a chces sa na nieco spytat, pozri sa najprv do zoznamu [0m
+casto kladenych otazok (prikaz [1m.faq[0m) a mozno tam najdes odpoved.[0m
+[0m
+Hned po prihlaseni mas nastavene zapnute farby. Ak boli s nimi problemy, mozes[0m
+si ich vypnut prikazom [1m.colour off[0m[0m
+[0m
+Ak sa k nam hlasis cez telnet, vyskusaj si prikaz [1m.client[0m ktory zapne[0m
+specialny editacny riadok do ktoreho budes pisat. Tvoj text teda nebude[0m
+prepisovany vypismi z talkera.[0m
+[0m
+Viac informacii o konkretnom prikaze sa dozvies cez [1m.pomoc konkretny prikaz[0m[0m
+Cim mas vyssi level, tym je Ti k dispozicii viac moznosti, vyhod a prikazov.[0m
+Ako OTROK nemozes robit skoro nic, preto sa co najskor zaregistruj ako riadny[0m
+OBCAN pomocou prikazu [1m.request[0m[0m
+[44m[1m[36m[57%] [37mstr:[36m 1, [33mENTER[37m-dalej, [33mB[37m-spat, [33mR[37m-znovu, [33mn[37m/[33m-n[37m stran, [33m/[37mhladat, [33mE[37m-koniec[0m[40m [0m[0mPouzi: .suicide <tvoje heslo>[0m
