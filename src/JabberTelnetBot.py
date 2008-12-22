@@ -40,6 +40,18 @@ enableTrace = False
 # script is placed.
 CONFIG_FILENAME=os.path.join(os.path.dirname(sys.argv[0]),"config.py")
 
+# Color palete to be readable on the white background
+COLOR_SCHEME = {
+    'black' : 'black',
+    'red' : 'red',
+    'green' : 'darkgreen',
+    'yellow' : 'darkyellow',
+    'blue' : 'darkblue',
+    'magenta' : 'magenta',
+    'cyan' : 'darkcyan'
+}
+
+
 #
 # Some useful code for us
 #
@@ -80,6 +92,7 @@ class Bot:
             logging.error("No Jabber user for Telnet user found: %s" % user.getID())
         else:
             ansiText = Ansi.AnsiText(msg.getText())
+            ansiText.setColorMap(COLOR_SCHEME)
             htmlText = ansiText.render()
             msgHTML = "<p style=\"font-family: courier\"><br/>%s</p> " % htmlText
             print("\n\n"+msgHTML+"\n\n")
