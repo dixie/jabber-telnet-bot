@@ -5,7 +5,7 @@ import re
 import xmpp.simplexml
 import logging
 
-ESC_TO_HTML = {
+ESC_TO_COLOR = {
     '30m' : 'black',
     '31m' : 'red',
     '32m' : 'green',
@@ -13,7 +13,7 @@ ESC_TO_HTML = {
     '34m' : 'blue',
     '35m' : 'magenta',
     '36m' : 'cyan',
-    '37m' : 'black',
+    '37m' : 'white',
     '38m' : 'black',
 }
 
@@ -29,6 +29,10 @@ class RenderType:
 class AnsiText:
     def __init__(self, text):
         self._parsedData = self.concatText(self.parseString(text))
+        self._colorMap = {}
+    
+    def setColorMap(self, colorMap):
+        self._colorMap = colorMap
 
     def parseESCSeq(self,chars):
         char = chars.pop()
@@ -95,8 +99,11 @@ class AnsiText:
                     #txt += "<!-- Terminal CONTROL Data -->" 
                     logging.info("Terminal Control data")
             elif type == DataType.COLOR:
-                if ESC_TO_HTML.has_key(value):
-                    txt += "<span style=\"color:%s\">" % str(ESC_TO_HTML[value])
+                if ESC_TO_COLOR.has_key(value):
+                    color = ESC_TO_COLOR[value]
+                    if self._colorMap.has_key(color):
+                        color = self._colorMap[color]
+                    txt += "<span style=\"color:%s\">" % color
                     tagStack.append('</span>')
                     font = True
                 elif value == '1m':
