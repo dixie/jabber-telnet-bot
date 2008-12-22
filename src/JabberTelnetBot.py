@@ -48,7 +48,8 @@ COLOR_SCHEME = {
     'yellow' : 'darkyellow',
     'blue' : 'darkblue',
     'magenta' : 'magenta',
-    'cyan' : 'darkcyan'
+    'cyan' : 'darkcyan',
+    'white' : 'black'
 }
 
 
