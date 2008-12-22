@@ -57,7 +57,7 @@ class User:
     #
     def flushBuffer(self):
         lines = string.split(self.buffer, '\n')
-        if(len(lines) == FORCE_FLUSH_LINES):
+        if(len(lines) >= FORCE_FLUSH_LINES):
             self.buffer = lines.pop()
         else:
             self.buffer = ""
