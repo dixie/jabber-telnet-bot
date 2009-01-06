@@ -12,14 +12,14 @@ CONFIGURATION
 
 Edit config.py file which is self-explained:
 
-# Atlantis host/port
+# Telnet / MUD host/port
 ATL_HOST="atlantis.talker.sk"
 ATL_PORT=23
 # JID = login into jabber / PWD = plaintext password
-JABBER_JID="meciar@gmail.com"
+JABBER_JID="meciar@example.com"
 JABBER_PWD="nbusr123"
 # This can be Set to None if JID contains all info
-JABBER_SERVER=("talk.google.com", 5223)
+JABBER_SERVER=("gmail.example.com", 5223)
 # JABBER_SERVER=None
 
 EXECUTE
