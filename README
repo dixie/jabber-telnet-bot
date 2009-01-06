@@ -1,0 +1,32 @@
+INSTALLATION
+
+You need to have at least:
+
+    * Python 2.5.2
+    * Python xmpp 0.3.1
+
+For debian-based distros (Ubuntu) type following: sudo apt-get install python-xmpp python
+
+And extract archive (where is also this README.txt placed) to some directory, e.g /home/yourname/jabberAtlBot/ or /usr/local/jabberAtlBot/ for system-wide
+CONFIGURATION
+
+Edit config.py file which is self-explained:
+
+# Atlantis host/port
+ATL_HOST="atlantis.talker.sk"
+ATL_PORT=23
+# JID = login into jabber / PWD = plaintext password
+JABBER_JID="meciar@gmail.com"
+JABBER_PWD="nbusr123"
+# This can be Set to None if JID contains all info
+JABBER_SERVER=("talk.google.com", 5223)
+# JABBER_SERVER=None
+
+EXECUTE
+
+Start the bot: ./JabberTelnetBot.py
+
+For help: ./JabberTelnetBot.py –help
+
+For different config file: ./JabberTelnetBot.py -c /home/cimrman/sekret/specialConfig.py
+
