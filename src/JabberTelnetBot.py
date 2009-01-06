@@ -27,13 +27,13 @@ import Ansi
 # $ ./JabberAtlBot.py -c ./config.py
 # 
 # Telnet host/port
-ATL_HOST="atlantis.talker.sk"
+ATL_HOST="telnet.example.com"
 ATL_PORT=23
 # JID = login into Jabber / PWD = plain text password
-JABBER_JID="meciar@gmail.com"
+JABBER_JID="meciar@example.com"
 JABBER_PWD="nbusr123"
 # This can be Set to None if JID contains all info
-JABBER_SERVER=("talk.google.com", 5223)
+JABBER_SERVER=("jabber.example.com", 5223)
 # JABBER_SERVER=None
 enableTrace = False
 # Configuration filename with path is config.py from directory where executed
@@ -78,11 +78,11 @@ class UserMap:
         del self.user_map_by_telnet[userTelnet.getID()]
 
 class Bot:
-    def __init__(self, atl_host, atl_port, jabber_jid, jabber_pwd, jabber_server):
+    def __init__(self, atl_host, atl_port, jabber_jid, jabber_pwd, jabber_server,jabber_sasl):
         self.at = Telnet.Gateway(atl_host, atl_port)
         self.at.observe(self)
         self.at.start()
-        self.jb = Jabber.Gateway(jabber_jid, jabber_pwd, jabber_server)
+        self.jb = Jabber.Gateway(jabber_jid, jabber_pwd, jabber_server, jabber_sasl)
         self.jb.observe(self)
         self.users = UserMap()
     
@@ -169,6 +169,6 @@ for pairs in [("HOST", ATL_HOST),("PORT", ATL_PORT), ("JABBERID",JABBER_JID)]:
 # Start the game
 #
 print("Starting.")
-bot = Bot(ATL_HOST,ATL_PORT,JABBER_JID,JABBER_PWD,JABBER_SERVER)
+bot = Bot(ATL_HOST,ATL_PORT,JABBER_JID,JABBER_PWD,JABBER_SERVER,JABBER_SASL)
 bot.serve()
 print("Finished.")

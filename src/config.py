@@ -7,3 +7,5 @@ JABBER_PWD="nbusr123"
 # This can be Set to None if JID contains all info
 JABBER_SERVER=("jabber.example.com", 5223)
 # JABBER_SERVER=None
+# Disable (None) or enable (1) SASL
+JABBER_SASL=None

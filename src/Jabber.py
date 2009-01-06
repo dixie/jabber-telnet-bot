@@ -55,7 +55,7 @@ class Observer:
         print("Observing")
     
 class Gateway:
-    def __init__( self, jid, password, server = None, res = None):
+    def __init__( self, jid, password, server = None, saslParam = 1, res = None):
         self.jid = xmpp.JID( jid)
         self.password = password
         self.res = (res or self.__class__.__name__)
@@ -63,6 +63,7 @@ class Gateway:
         self.__finished = False
         self.observers = []
         self.server = server
+	self.sasl = saslParam
         
     def log( self, s):
         """Logging facility, can be overridden in subclasses to log to file, etc.."""
@@ -80,7 +81,7 @@ class Gateway:
                 self.log( 'unable to connect to server.')
                 return None
                 
-            if not conn.auth( self.jid.getNode(), self.password, self.res):
+            if not conn.auth( self.jid.getNode(), self.password, self.res, sasl=self.sasl):
                 self.log( 'unable to authorize with server.')
                 return None
             
