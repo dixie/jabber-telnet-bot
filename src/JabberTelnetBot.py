@@ -117,8 +117,11 @@ class Bot:
         if userAt == None:
             userAt = self.at.createUser()
             self.users.addUserPair(user, userAt)
-        msgAt = Telnet.Message(str(msg.getText())+"\n")
-        self.at.send(userAt, msgAt)
+        if msg.getText() != None:
+            msgAt = Telnet.Message(msg.getText()+"\n")
+            self.at.send(userAt, msgAt)
+        else:
+            logging.error("Empty Text message received over Jabber")
         
     def serve(self):
         try:
