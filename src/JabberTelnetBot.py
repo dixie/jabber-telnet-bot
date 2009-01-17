@@ -95,9 +95,10 @@ class Bot:
             ansiText = Ansi.AnsiText(msg.getText())
             ansiText.setColorMap(COLOR_SCHEME)
             htmlText = ansiText.render()
-            msgHTML = "<p style=\"font-family: courier\"><br/>%s</p> " % htmlText
+            pureText = ansiText.render(Ansi.RenderType.TEXT)
+            msgHTML = "<p style=\"font-family: monospace\"><br/>%s</p> " % htmlText
             print("\n\n"+msgHTML+"\n\n")
-            msgJb = Jabber.Message("Your IM don't support rich text messages",msgHTML)
+            msgJb = Jabber.Message(pureText,msgHTML)
             self.jb.send(userJb.getJabberUser(),msgJb,userJb.getThread(),userJb.getType())
             
     def handleTelnetDisconnect(self, user):
@@ -117,10 +118,11 @@ class Bot:
         if userAt == None:
             userAt = self.at.createUser()
             self.users.addUserPair(user, userAt)
-        if msg.getText() != None:
+	if msg.getText() != None:
             msgAt = Telnet.Message(msg.getText()+"\n")
             self.at.send(userAt, msgAt)
         else:
+            print("Empty Text message received over Jabber")
             logging.error("Empty Text message received over Jabber")
         
     def serve(self):
