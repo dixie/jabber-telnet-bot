@@ -85,7 +85,9 @@ class AnsiText:
         return parsedResult
 
     def render(self, type=RenderType.HTML):
-        return self.renderHTML(self._parsedData)
+	if type == RenderType.HTML:
+	        return self.renderHTML(self._parsedData)
+	return self.renderText(self._parsedData)
 
     def renderHTML(self,parsedText):
         txt = ''
@@ -122,4 +124,17 @@ class AnsiText:
         txt += ''.join(tagStack)
         return txt 
 
-
+    def renderText(self,parsedText):
+        txt = ''
+        for element in parsedText:
+            (type,value) = element
+            if type == DataType.CONTROL:
+                if value == '\n':
+                    txt += '\n'
+                else:
+                    #txt += "<!-- Terminal CONTROL Data -->" 
+                    logging.warn("Ingore non-text data: %s" % str(value))
+                    #txt += "\n<!-- ESC COLOR (%s) not known -->\n" % str(value)
+            elif type == DataType.TEXT:
+                    txt += value
+        return txt 
