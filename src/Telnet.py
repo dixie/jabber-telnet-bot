@@ -11,9 +11,9 @@ import sys
 #
 # Following Telnet data -> jabber message flush policy is defined:
 # if(not new data comming from Telnet for more than SILENT_FLUSH_TIME) 
-#         flushData -> send data over jabber to user
+#         flushData -> send data over jabber to session
 # else if (data are still comming but not flushed for FORCE_FLUSH_TIME)
-#         flushData -> send data over jabber to user
+#         flushData -> send data over jabber to session
 #
 # In human words:
 # Means that data (lines) are grouped for 10 seconds and than they
@@ -27,19 +27,19 @@ FORCE_FLUSH_LINES = 3
 SILENT_FLUSH_TIME = 2
 
 #
-# Telnet User
+# Telnet Session
 #
-class User:
-    def __init__(self, userId, sock):
-        self.userId = "%s@Telnet" % userId
+class Session:
+    def __init__(self, sessionId, sock):
+        self.sessionId = "%s@Telnet" % sessionId
         self.sock = sock
         self.timestamp_flush = time.time()
         self.timestamp_mod = time.time()
         self.buffer = ""
-        print "User initialized"
+        print "Session initialized"
         
     def getID(self):
-        return self.userId
+        return self.sessionId
         
     def getSocket(self):
         return self.sock
@@ -98,10 +98,10 @@ class Message:
 # Example observer implementation
 #
 class Observer:
-    def handleTelnetMessage(self, user, text):
+    def handleTelnetMessage(self, session, text):
         print "Handling Telnet Message"
     
-    def handleTelnetDisconnect(self, user):
+    def handleTelnetDisconnect(self, session):
         print "Handling Telnet Disconnect"
        
 #
@@ -114,16 +114,16 @@ class Gateway(threading.Thread):
         self.port = port
         self.stopFlag = False
         self.observers = []
-        self._userId = 0;
-        self.map_sock_to_user = {}
+        self._sessionId = 0;
+        self.map_sock_to_session = {}
         
     def run(self):
         print("Telnet Thread started")
         while self.stopFlag == False:
-            #print("Processing clients. active users: %s" % (len(self.map_sock_to_user)))
+            #print("Processing clients. active sessions: %s" % (len(self.map_sock_to_session)))
             socketList = []
-            for user in self.map_sock_to_user.values():
-                socketList.append(user.getSocket())
+            for session in self.map_sock_to_session.values():
+                socketList.append(session.getSocket())
             #
             # Wait for READ / ERROR Event (hardcoded delay 1 seconds)
             #
@@ -138,55 +138,55 @@ class Gateway(threading.Thread):
             for sock in ready[0]:
                 buffer = sock.recv(90,socket.MSG_DONTWAIT)
                 if not buffer:
-                    user = self.map_sock_to_user[sock]
+                    session = self.map_sock_to_session[sock]
                     for observer in self.observers:
-                        observer.handleTelnetDisconnect(user)
-                        del self.map_sock_to_user[sock]
+                        observer.handleTelnetDisconnect(session)
+                        del self.map_sock_to_session[sock]
                 elif len(buffer) == 0:
                     print('Warning: sock.rev() returns empty data!')
                 else:
-                    user = self.map_sock_to_user[sock]
-                    user.appendBuffer(buffer)
+                    session = self.map_sock_to_session[sock]
+                    session.appendBuffer(buffer)
             #
             # Check if we need to flush buffers
             #
-            for user in self.map_sock_to_user.values():
-                if user.needFlush():
-                    msg = Message(user.flushBuffer())
+            for session in self.map_sock_to_session.values():
+                if session.needFlush():
+                    msg = Message(session.flushBuffer())
                     for observer in self.observers:
-                        observer.handleTelnetMessage(user, msg)
+                        observer.handleTelnetMessage(session, msg)
 
             #
             # Handle error sockets
             #
             for sock in ready[2]:
-                print "Handle disconnected user (exception event on select())"
-                user = self.map_sock_to_user[sock]
+                print "Handle disconnected session (exception event on select())"
+                session = self.map_sock_to_session[sock]
                 for observer in self.observers:
-                    observer.handleTelnetDisconnect(user)
-                    del self.map_sock_to_user[sock]
+                    observer.handleTelnetDisconnect(session)
+                    del self.map_sock_to_session[sock]
        
     #
-    # Method for sending message to Telnet User
+    # Method for sending message to Telnet Session
     #
-    def send(self, user, message):
-        print("Sending message to user=%s message=%s" % (user.getID(), message.getText()))
-        sock = user.getSocket()
-        if not self.map_sock_to_user.has_key(sock):
-            print("No such Telnet user found!")
+    def send(self, session, message):
+        print("Sending message to session=%s message=%s" % (session.getID(), message.getText()))
+        sock = session.getSocket()
+        if not self.map_sock_to_session.has_key(sock):
+            print("No such Telnet session found!")
         else:
             sock.send(message.getText())
        
     #
-    # Create new Telnet connection (user)
+    # Create new Telnet connection (session)
     #
-    def createUser(self):
-        self._userId+=1
+    def createSession(self):
+        self._sessionId+=1
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.host, self.port))
-        newUser = User(self._userId, sock)
-        self.map_sock_to_user[sock] = newUser
-        return newUser
+        newSession = Session(self._sessionId, sock)
+        self.map_sock_to_session[sock] = newSession
+        return newSession
         
     def shutdown(self):
         self.stopFlag = True

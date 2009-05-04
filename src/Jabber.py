@@ -1,4 +1,5 @@
 # Jabber Gateway Implementation
+# Code client template copied from xmpp library
 
 import xmpp
 import xmpp.simplexml
@@ -21,17 +22,17 @@ class HTMLMessage(xmpp.Message):
             body.addChild(node=content)
         print(str(self))
 
-class User:
-    def __init__(self,user,thread,atype):
-        self.user = user
+class Session:
+    def __init__(self,session,thread,atype):
+        self.session = session
         self.thread = thread
         self.atype = atype
         
     def getID(self):
-        return self.user.getStripped()  
+        return self.session.getStripped()  
     
-    def getJabberUser(self):
-        return self.user
+    def getJabberSession(self):
+        return self.session
     
     def getType(self):
         return self.atype
@@ -51,7 +52,7 @@ class Message:
         return self.richBody
 
 class Observer:
-    def handleJabberMessage(self, user, message):
+    def handleJabberMessage(self, session, message):
         print("Observing")
     
 class Gateway:
@@ -106,7 +107,7 @@ class Gateway:
         """Messages sent to the bot will arrive here. Command handling + routing is done in this function."""
         print("callback_message method")
         msg = Message(mess.getBody())
-        usr = User(mess.getFrom(),mess.getThread(), mess.getType())
+        usr = Session(mess.getFrom(),mess.getThread(), mess.getType())
         for observer in self.observers:
             observer.handleJabberMessage(usr,msg)
             

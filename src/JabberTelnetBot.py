@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # Jabber Telnet Bot, dixiecko@gmail.com 
 #
@@ -56,26 +57,26 @@ COLOR_SCHEME = {
 #
 # Some useful code for us
 #
-class UserMap:
+class SessionMap:
     def __init__(self):
-        self.user_map_by_telnet = {}
-        self.user_map_by_jabber = {}
+        self.session_map_by_telnet = {}
+        self.session_map_by_jabber = {}
         
-    def getJabberUser(self, user):
-        return self.user_map_by_telnet.get(user.getID())
+    def getJabberSession(self, session):
+        return self.session_map_by_telnet.get(session.getID())
         
-    def getTelnetUser(self, user):
-        return self.user_map_by_jabber.get(user.getID())
+    def getTelnetSession(self, session):
+        return self.session_map_by_jabber.get(session.getID())
         
-    def addUserPair(self, userJabber, userTelnet):
-        logging.info("Added new user pair Jabber=%s and Telnet=%s" % (userJabber.getID(), userTelnet.getID()))
-        self.user_map_by_jabber[userJabber.getID()] = userTelnet
-        self.user_map_by_telnet[userTelnet.getID()] = userJabber
+    def addSessionPair(self, sessionJabber, sessionTelnet):
+        logging.info("Added new session pair Jabber=%s and Telnet=%s" % (sessionJabber.getID(), sessionTelnet.getID()))
+        self.session_map_by_jabber[sessionJabber.getID()] = sessionTelnet
+        self.session_map_by_telnet[sessionTelnet.getID()] = sessionJabber
         
-    def removeUserPair(self, userJabber, userTelnet):
-        logging.info("Remove user pair Jabber=%s and Telnet=%s" % (userJabber.getID(), userTelnet.getID()))
-        del self.user_map_by_jabber[userJabber.getID()]
-        del self.user_map_by_telnet[userTelnet.getID()]
+    def removeSessionPair(self, sessionJabber, sessionTelnet):
+        logging.info("Remove session pair Jabber=%s and Telnet=%s" % (sessionJabber.getID(), sessionTelnet.getID()))
+        del self.session_map_by_jabber[sessionJabber.getID()]
+        del self.session_map_by_telnet[sessionTelnet.getID()]
 
 class Bot:
     def __init__(self, atl_host, atl_port, jabber_jid, jabber_pwd, jabber_server,jabber_sasl):
@@ -84,13 +85,13 @@ class Bot:
         self.at.start()
         self.jb = Jabber.Gateway(jabber_jid, jabber_pwd, jabber_server, jabber_sasl)
         self.jb.observe(self)
-        self.users = UserMap()
+        self.sessions = SessionMap()
     
-    def handleTelnetMessage(self, user, msg):
+    def handleTelnetMessage(self, session, msg):
         logging.debug("handle Telnet message")
-        userJb = self.users.getJabberUser(user)
-        if userJb == None:
-            logging.error("No Jabber user for Telnet user found: %s" % user.getID())
+        sessionJb = self.sessions.getJabberSession(session)
+        if sessionJb == None:
+            logging.error("No Jabber session for Telnet session found: %s" % session.getID())
         else:
             ansiText = Ansi.AnsiText(msg.getText())
             ansiText.setColorMap(COLOR_SCHEME)
@@ -99,28 +100,28 @@ class Bot:
             msgHTML = "<p style=\"font-family: monospace\"><br/>%s</p> " % htmlText
             print("\n\n"+msgHTML+"\n\n")
             msgJb = Jabber.Message(pureText,msgHTML)
-            self.jb.send(userJb.getJabberUser(),msgJb,userJb.getThread(),userJb.getType())
+            self.jb.send(sessionJb.getJabberSession(),msgJb,sessionJb.getThread(),sessionJb.getType())
             
-    def handleTelnetDisconnect(self, user):
+    def handleTelnetDisconnect(self, session):
         logging.debug("Handle Telnet disconnect")
-        userJb = self.users.getJabberUser(user)
-        if userJb == None:
-            logging.error("No Jabber user for Telnet user found: %s" % user.getID())
+        sessionJb = self.sessions.getJabberSession(session)
+        if sessionJb == None:
+            logging.error("No Jabber session for Telnet session found: %s" % session.getID())
         else:
             txt = "Telnet Connection Lost"
             msgJb = Jabber.Message(txt,"<p style=\"font-weight: bold\">%s</p>" % txt)
-            self.jb.send(userJb.getJabberUser(), msgJb)
-            self.users.removeUserPair(userJb, user) 
+            self.jb.send(sessionJb.getJabberSession(), msgJb)
+            self.sessions.removeSessionPair(sessionJb, session) 
         
-    def handleJabberMessage(self, user, msg):
-        logging.debug("Observing Jabber")
-        userAt = self.users.getTelnetUser(user)
-        if userAt == None:
-            userAt = self.at.createUser()
-            self.users.addUserPair(user, userAt)
+    def handleJabberMessage(self, session, msg):
+        logging.debug("handleJabberMessage")
+        sessionAt = self.sessions.getTelnetSession(session)
+        if sessionAt == None:
+            sessionAt = self.at.createSession()
+            self.sessions.addSessionPair(session, sessionAt)
 	if msg.getText() != None:
             msgAt = Telnet.Message(msg.getText()+"\n")
-            self.at.send(userAt, msgAt)
+            self.at.send(sessionAt, msgAt)
         else:
             print("Empty Text message received over Jabber")
             logging.error("Empty Text message received over Jabber")
@@ -164,8 +165,6 @@ for o, a in opts:
 #
 print("Loading configuration from %s" % CONFIG_FILENAME)
 execfile(CONFIG_FILENAME)
-
-
 
 for pairs in [("HOST", ATL_HOST),("PORT", ATL_PORT), ("JABBERID",JABBER_JID)]:
     print("%s=%s" % pairs)
